@@ -8,6 +8,8 @@
 #'
 #' # Sum will be 1.0
 #' calc_weights(evidences)
+#'
+#' beastier::check_empty_beaustier_folders()
 #' @author Richèl J.C. Bilderbeek
 #' @export
 calc_weights <- function(
@@ -16,7 +18,7 @@ calc_weights <- function(
   # The marginal likelihoods can be very small and are therefore
   # represented as Rmpfr numbers
   zero <- 0.0
-  if (class(marg_liks) == "mpfr") {
+  if (inherits(marg_liks, "mpfr")) {
     zero <- Rmpfr::mpfr(0.0, 512)
   }
 

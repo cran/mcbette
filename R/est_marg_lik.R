@@ -34,6 +34,8 @@
 #'     inference_model = inference_model,
 #'     beast2_options = beast2_options
 #'   )
+#'
+#'   beastier::check_empty_beaustier_folders()
 #' }
 #' @author Richèl J.C. Bilderbeek
 #' @export
@@ -53,7 +55,7 @@ est_marg_lik <- function(
       "BEAST2 not installed. \n",
       "'beast2_options$beast2_path': ", beast2_options$beast2_path, " \n",
       "'beast2_folder': ", beast2_folder, " \n",
-      "Tip: use beastier::install_beast2()"
+      "Tip: use beastierinstall::install_beast2()"
     )
   }
   if (!beastier::is_bin_path(beast2_options$beast2_path)) {

@@ -85,6 +85,8 @@
 #'
 #'   # Interpret the results
 #'   interpret_marg_lik_estimates(marg_liks)
+#'
+#'   beastier::check_empty_beaustier_folders()
 #' }
 #' @author Richèl J.C. Bilderbeek
 #' @export
@@ -163,7 +165,7 @@ est_marg_liks <- function(
     beautier::check_inference_model(inference_model)
     beastier::check_beast2_options(beast2_options)
     beautier::check_nested_sampling_mcmc(inference_model$mcmc)
-    ns <- est_marg_lik(
+    ns <- mcbette::est_marg_lik(
       fasta_filename = fasta_filename,
       inference_model = inference_model,
       beast2_options = beast2_options,
@@ -181,7 +183,7 @@ est_marg_liks <- function(
   }
 
   weights <- as.numeric(
-    calc_weights(marg_liks = exp(Rmpfr::mpfr(marg_log_liks, 512)))
+    mcbette::calc_weights(marg_liks = exp(Rmpfr::mpfr(marg_log_liks, 512)))
   )
   df <- data.frame(
     site_model_name = site_model_names,

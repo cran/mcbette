@@ -58,6 +58,9 @@
 #'
 #'   # Interpret the results
 #'   interpret_marg_lik_estimates(marg_liks)
+#'
+#'   beastier::check_empty_beaustier_folders()
+#'   beastier::remove_beaustier_folders()
 #' }
 #' @docType package
 #' @name mcbette
@@ -176,11 +179,11 @@
 #' @importFrom beautier create_uniform_distr
 #' @importFrom beautier create_xml_declaration
 #' @importFrom beautier create_yule_tree_prior
+#' @importFrom beautier is_on_ci
 #' @importFrom beastier check_beast2
 #' @importFrom beastier create_beast2_options
 #' @importFrom beastier install_beast2
 #' @importFrom beastier is_beast2_installed
-#' @importFrom beastier is_on_travis
 #' @importFrom beastier uninstall_beast2
 #' @importFrom mauricer install_beast2_pkg
 #' @importFrom mauricer is_beast2_ns_pkg_installed

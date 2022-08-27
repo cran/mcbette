@@ -12,47 +12,37 @@
 
 <meta name="author" content="Richèl J.C. Bilderbeek" />
 
-<meta name="date" content="2020-12-05" />
+<meta name="date" content="2022-08-26" />
 
 <title>Demo</title>
 
-<style type="text/css">
-a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
-a.anchor-section::before {content: '#';}
-.hasAnchor:hover a.anchor-section {visibility: visible;}
-</style>
-<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Do nothing if AnchorJS is used
-  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
-    return;
-  }
-
-  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-
-  // Do nothing if sections are already anchored
-  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
-    return null;
-  }
-
-  // Use section id when pandoc runs with --section-divs
-  const section_id = function(x) {
-    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
-            ? x.id : '');
-  };
-
-  // Add anchors
-  h.forEach(function(x) {
-    const id = x.id || section_id(x.parentElement);
-    if (id === '') {
-      return null;
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
     }
-    let anchor = document.createElement('a');
-    anchor.href = '#' + id;
-    anchor.classList = ['anchor-section'];
-    x.classList.add('hasAnchor');
-    x.appendChild(anchor);
-  });
+  }
 });
 </script>
 
@@ -66,28 +56,37 @@ document.addEventListener('DOMContentLoaded', function() {
     </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -96,9 +95,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -138,13 +137,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -152,6 +158,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   }
 })();
 </script>
+
 
 
 
@@ -349,7 +356,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Demo</h1>
 <h4 class="author">Richèl J.C. Bilderbeek</h4>
-<h4 class="date">2020-12-05</h4>
+<h4 class="date">2022-08-26</h4>
 
 
 
@@ -362,70 +369,72 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="getting-started" class="section level2">
 <h2>Getting started</h2>
 <p>First, load <code>mcbette</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(mcbette)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(mcbette)</span></code></pre></div>
 <p>To use <code>mcbette</code>, BEAST2 and the BEAST2 <code>NS</code> package must be installed:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="cf">if</span> (rappdirs<span class="op">::</span><span class="kw">app_dir</span>()<span class="op">$</span>os <span class="op">==</span><span class="st"> &quot;win&quot;</span>) {</a>
-<a class="sourceLine" id="cb2-2" title="2">  <span class="kw">message</span>(<span class="st">&quot;&#39;mcbette&#39; can only run on Linux and MacOS&quot;</span>)</a>
-<a class="sourceLine" id="cb2-3" title="3">} <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span>beastier<span class="op">::</span><span class="kw">is_beast2_installed</span>()) {</a>
-<a class="sourceLine" id="cb2-4" title="4">  <span class="kw">message</span>(</a>
-<a class="sourceLine" id="cb2-5" title="5">    <span class="st">&quot;BEAST2 must be installed. &quot;</span>,</a>
-<a class="sourceLine" id="cb2-6" title="6">    <span class="st">&quot;Tip: use &#39;beastier::install_beast2()&#39;&quot;</span></a>
-<a class="sourceLine" id="cb2-7" title="7">  )</a>
-<a class="sourceLine" id="cb2-8" title="8">} <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span>mauricer<span class="op">::</span><span class="kw">is_beast2_ns_pkg_installed</span>()) {</a>
-<a class="sourceLine" id="cb2-9" title="9">  <span class="kw">message</span>(</a>
-<a class="sourceLine" id="cb2-10" title="10">    <span class="st">&quot;The BEAST2 &#39;NS&#39; package must be installed. &quot;</span>,</a>
-<a class="sourceLine" id="cb2-11" title="11">    <span class="st">&quot;Tip: use &#39;mauricer::install_beast2_pkg(</span><span class="ch">\&quot;</span><span class="st">NS</span><span class="ch">\&quot;</span><span class="st">)&#39;&quot;</span></a>
-<a class="sourceLine" id="cb2-12" title="12">  )</a>
-<a class="sourceLine" id="cb2-13" title="13">}</a>
-<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; BEAST2 must be installed. Tip: use &#39;beastier::install_beast2()&#39;</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="cf">if</span> (rappdirs<span class="op">::</span><span class="kw">app_dir</span>()<span class="op">$</span>os <span class="op">==</span><span class="st"> &quot;win&quot;</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="kw">message</span>(<span class="st">&quot;&#39;mcbette&#39; can only run on Linux and MacOS&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a>} <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span>beastier<span class="op">::</span><span class="kw">is_beast2_installed</span>()) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  <span class="kw">message</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a>    <span class="st">&quot;BEAST2 must be installed. &quot;</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a>    <span class="st">&quot;Tip: use &#39;beastier::install_beast2()&#39;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a>  )</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a>} <span class="cf">else</span> <span class="cf">if</span> (<span class="op">!</span>mauricer<span class="op">::</span><span class="kw">is_beast2_ns_pkg_installed</span>()) {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a>  <span class="kw">message</span>(</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a>    <span class="st">&quot;The BEAST2 &#39;NS&#39; package must be installed. &quot;</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a>    <span class="st">&quot;Tip: use &#39;mauricer::install_beast2_pkg(</span><span class="ch">\&quot;</span><span class="st">NS</span><span class="ch">\&quot;</span><span class="st">)&#39;&quot;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>  )</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="co">#&gt; BEAST2 must be installed. Tip: use &#39;beastier::install_beast2()&#39;</span></span></code></pre></div>
 <p>If you’ve just gotten a message that you need to install either BEAST2 or the BEAST2 NS package, do so. The rest of this vignette will be empty.</p>
 </div>
 <div id="method" class="section level2">
 <h2>Method</h2>
 <p>To run <code>mcbette</code>, we need a FASTA file with a DNA alignment in it. We use one that is present in the <code>mcbette</code> package:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">fasta_filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;primates.fas&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;mcbette&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>fasta_filename &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;primates.fas&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;mcbette&quot;</span>)</span></code></pre></div>
 <p>Now we have the alignment saved in our FASTA file, we can display it:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">alignment &lt;-<span class="st"> </span>ape<span class="op">::</span><span class="kw">read.FASTA</span>(fasta_filename)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">image</span>(alignment)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>alignment &lt;-<span class="st"> </span>ape<span class="op">::</span><span class="kw">read.FASTA</span>(fasta_filename)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="kw">image</span>(alignment)</span></code></pre></div>
 <p><img src="data:image/png;base64,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" /><!-- --></p>
 <p><code>mcbette</code> allows one to select the evolutionary model that has the heighest evidence (aka marginal likelihood) for having generated that alignment. For more information how to set up an inference model, see the ‘Inference models’ vignette of the <code>beautier</code> package:</p>
 <pre><code>vignette(&quot;beautier&quot;, &quot;inference_models&quot;)</code></pre>
 <p>In this example, we compare two evolutionary models on the alignment shown above. Because the best evolutionary model will likely be used in Bayesian inference, in this example we will use ‘evolutionary model’ and ‘inference model’ interchangably.</p>
 <p>One of the inference models is the default <code>babette</code> inference model.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">inference_model_<span class="dv">1</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>()</a>
-<a class="sourceLine" id="cb6-2" title="2">inference_model_<span class="dv">1</span><span class="op">$</span>site_model<span class="op">$</span>name</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [1] &quot;JC69&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>inference_model_<span class="dv">1</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>inference_model_<span class="dv">1</span><span class="op">$</span>site_model<span class="op">$</span>name</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="co">#&gt; [1] &quot;JC69&quot;</span></span></code></pre></div>
 <p>only differing in their nucleotide substitution model:</p>
 <ol style="list-style-type: decimal">
 <li>JC69: all nucleotides share the same mutation rate. For example, the mutation rate from adenine to cytosine is the same as the mutation rate from guanine to thymine</li>
 <li>GTR: there is a different mutation rate from each nucleotide to each other nucleotide</li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="cf">if</span> (<span class="kw">can_run_mcbette</span>()) {</a>
-<a class="sourceLine" id="cb7-2" title="2">  <span class="co"># Create the two inference models</span></a>
-<a class="sourceLine" id="cb7-3" title="3">  inference_model_<span class="dv">1</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>(</a>
-<a class="sourceLine" id="cb7-4" title="4">    <span class="dt">site_model =</span> beautier<span class="op">::</span><span class="kw">create_jc69_site_model</span>()</a>
-<a class="sourceLine" id="cb7-5" title="5">  )</a>
-<a class="sourceLine" id="cb7-6" title="6">  inference_model_<span class="dv">2</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>(</a>
-<a class="sourceLine" id="cb7-7" title="7">    <span class="dt">site_model =</span> beautier<span class="op">::</span><span class="kw">create_gtr_site_model</span>()</a>
-<a class="sourceLine" id="cb7-8" title="8">  )</a>
-<a class="sourceLine" id="cb7-9" title="9">  <span class="co"># Shorten the run, by doing a short (dirty, unreliable) MCMC</span></a>
-<a class="sourceLine" id="cb7-10" title="10">  inference_model_<span class="dv">1</span><span class="op">$</span>mcmc &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_test_ns_mcmc</span>()</a>
-<a class="sourceLine" id="cb7-11" title="11">  inference_model_<span class="dv">2</span><span class="op">$</span>mcmc &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_test_ns_mcmc</span>()</a>
-<a class="sourceLine" id="cb7-12" title="12"></a>
-<a class="sourceLine" id="cb7-13" title="13">  <span class="co"># Combine the two inference models</span></a>
-<a class="sourceLine" id="cb7-14" title="14">  inference_models &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">list</span>(inference_model_<span class="dv">1</span>), <span class="kw">list</span>(inference_model_<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb7-15" title="15"></a>
-<a class="sourceLine" id="cb7-16" title="16">  <span class="co"># Compare the the two inference models</span></a>
-<a class="sourceLine" id="cb7-17" title="17">  marg_liks &lt;-<span class="st"> </span><span class="kw">est_marg_liks</span>(</a>
-<a class="sourceLine" id="cb7-18" title="18">    <span class="dt">fasta_filename =</span> fasta_filename,</a>
-<a class="sourceLine" id="cb7-19" title="19">    <span class="dt">inference_models =</span> inference_models</a>
-<a class="sourceLine" id="cb7-20" title="20">  )</a>
-<a class="sourceLine" id="cb7-21" title="21">  knitr<span class="op">::</span><span class="kw">kable</span>(marg_liks)</a>
-<a class="sourceLine" id="cb7-22" title="22">}</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="cf">if</span> (<span class="kw">can_run_mcbette</span>()) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="co"># Create the two inference models</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>  inference_model_<span class="dv">1</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>    <span class="dt">site_model =</span> beautier<span class="op">::</span><span class="kw">create_jc69_site_model</span>()</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>  )</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  inference_model_<span class="dv">2</span> &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_ns_inference_model</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="dt">site_model =</span> beautier<span class="op">::</span><span class="kw">create_gtr_site_model</span>()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  )</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>  <span class="co"># Shorten the run, by doing a short (dirty, unreliable) MCMC</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>  inference_model_<span class="dv">1</span><span class="op">$</span>mcmc &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_test_ns_mcmc</span>()</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>  inference_model_<span class="dv">2</span><span class="op">$</span>mcmc &lt;-<span class="st"> </span>beautier<span class="op">::</span><span class="kw">create_test_ns_mcmc</span>()</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>  <span class="co"># Combine the two inference models</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>  inference_models &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">list</span>(inference_model_<span class="dv">1</span>), <span class="kw">list</span>(inference_model_<span class="dv">2</span>))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a>  <span class="co"># Compare the the two inference models</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a>  marg_liks &lt;-<span class="st"> </span><span class="kw">est_marg_liks</span>(</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true"></a>    <span class="dt">fasta_filename =</span> fasta_filename,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true"></a>    <span class="dt">inference_models =</span> inference_models</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true"></a>  )</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true"></a>  knitr<span class="op">::</span><span class="kw">kable</span>(marg_liks)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true"></a>}</span></code></pre></div>
 <p>The results are interpreted by <code>interpret_marg_lik_estimates</code> as follows:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="cf">if</span> (<span class="kw">can_run_mcbette</span>()) {</a>
-<a class="sourceLine" id="cb8-2" title="2">  <span class="kw">interpret_marg_lik_estimates</span>(marg_liks)</a>
-<a class="sourceLine" id="cb8-3" title="3">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="cf">if</span> (<span class="kw">can_run_mcbette</span>()) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="kw">interpret_marg_lik_estimates</span>(marg_liks)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Clean up:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>beastier<span class="op">::</span><span class="kw">remove_beaustier_folders</span>()</span></code></pre></div>
 </div>
 
 
