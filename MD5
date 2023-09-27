@@ -1,4 +1,4 @@
-0fd893cf6c291f7e97f0e7003918748c *DESCRIPTION
+c1d8cb21e93221b3d958d35858f9b6d2 *DESCRIPTION
 5b2cb5edc467c11a7b4b6c9fe2b99ab8 *NAMESPACE
 64d6b1620e99566119fa18764ccc2435 *R/calc_weights.R
 09b5f94e4450685c19002eda0fa2b667 *R/can_run_mcbette.R
@@ -13,16 +13,17 @@ f36cbd9d4d3fe056273baf3e6145988a *R/est_marg_liks.R
 f058d73283c3f91f9d40ead5cf31018e *R/interpret_bayes_factor.R
 d8555ca749a0d2268e313a4474519ec9 *R/interpret_marg_lik_estimates.R
 5aec3cfb129cf0b945178e58fcf6d4e7 *R/is_marg_liks.R
-439d4ee6c40b3f0cb5692223fa3a5766 *R/mcbette.R
-4479bc88d33e71af2df24f50d67d3ee3 *R/mcbette_report.R
+80eef1f4801119d7a0b8f46a0b162036 *R/mcbette-package.R
+4099f7596fc7f9f9cf03efe6e18ec4cb *R/mcbette_report.R
 c3f5665db10fcda8e7b88f88cc108afd *R/mcbette_self_test.R
 86911a2f2e5d4818faedfd5cae452029 *R/plot_marg_liks.R
 9c15afc4969e83c75568538d5ce3d4e0 *R/set_mcbette_state.R
 0cf581f17d03a5e360725e6cc3105d60 *build/vignette.rds
+445e280eabefe1f1cac4f9bb8e80cd13 *inst/CITATION
 7d1ad8a6500a08a6dc682d8d3020e365 *inst/WORDLIST
 671742f9670f3a313cd526a623d2b45c *inst/doc/demo.R
 7f198f3e84a3805a74fffa3ce8f39fe6 *inst/doc/demo.Rmd
-20a0fb6538e3656874530978fffb3aaf *inst/doc/demo.html
+06b76a553e8df8d78cdf8eff047032f8 *inst/doc/demo.html
 e3bb25016829dcd4715bf29bcf091398 *inst/extdata/10_1000.fas
 9b800953cb97a73ae2b8942d6487022a *inst/extdata/160_1000.fas
 8d15ae47b9ad3fe3178ea648e47392f1 *inst/extdata/20_1000.fas
@@ -51,7 +52,6 @@ b55c56f3943a394162527954ca4a3009 *man/figures/GitHubActions.png
 44ed5b9cab020ce9bf73c6aef9bccc1b *man/figures/README-plot_marg_liks-1.png
 8f3304f61dd6ead1339297e19181755f *man/figures/README-unnamed-chunk-2-1.png
 1ba2cbd1ad96f24d8c75761b7fad5000 *man/figures/README.md
-4f9bce317a2b82518737a7ee7381c2ec *man/figures/TravisCI.png
 158a3fba32918db835b8af2863a1081f *man/figures/alignment.png
 1893274568826672fb0a6a6ab29ccbf4 *man/figures/alignment_joss.fasta
 fab4bdc130b81bb7b5385dd8724c7ee4 *man/figures/alignment_joss.png
@@ -81,8 +81,8 @@ d31b8f4b896c93650a808e7602803b6f *man/figures/posterior_joss_4.png
 985b0c3612d4340134f9c2347db5b48a *man/interpret_bayes_factor.Rd
 9fc9a7251d25588594523f52bf5f9c3e *man/interpret_marg_lik_estimates.Rd
 299329c6a96e048d75f1a172cb60ba0a *man/is_marg_liks.Rd
-b42a374fce59b2b12c518e5f87e6e0a3 *man/mcbette.Rd
-85ba4bb821aa9d9e7134eaace03cdd32 *man/mcbette_report.Rd
+ea9b8b12459c461ee8e32259e78d7bdc *man/mcbette-package.Rd
+d3371198d95b511b601b9e817ee5695c *man/mcbette_report.Rd
 9a6bc17a67256e48817f67c69f6f3460 *man/mcbette_self_test.Rd
 c3ebfe8688a68f2fe9363c10828a3161 *man/plot_marg_liks.Rd
 4aadf87c105c07ff27ea1ecc82c263fb *man/set_mcbette_state.Rd
